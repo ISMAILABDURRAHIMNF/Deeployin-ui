@@ -6,14 +6,19 @@ import Register from './Register'
 import Home from './Home'
 import './index.css'
 
+const isAuthenticated = () => {
+  return localStorage.getItem('token') !== null
+}
+
 export default function Main() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={isAuthenticated() ? <Home/> : <Login/>} />
+        <Route path="/login" element={isAuthenticated() ? <Home/> : <Login/>} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={isAuthenticated() ? <Home/> : <Login/>} />
+        <Route path="/logout" element={<Login />} />
       </Routes>
     </BrowserRouter>
   )
