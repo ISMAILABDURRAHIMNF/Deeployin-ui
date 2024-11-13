@@ -5,7 +5,8 @@ import { useState } from 'react'
 export default function Home() {
     const [file, setFile] = useState(null)
     const [language, setLanguage] = useState('');
-    const [version, setVersion] = useState('');
+    const [desc, setDesc] = useState('');
+    const [token, setToken] = useState(() => localStorage.getItem("token"));
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -14,10 +15,12 @@ export default function Home() {
 
     const handleUpload = async (e) => {
         e.preventDefault();
+
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('token', token);
         formData.append('language', language);
-        formData.append('version', version);
+        formData.append('desc', desc);
 
         console.log(formData)
 
@@ -45,8 +48,8 @@ export default function Home() {
                     <form onSubmit={handleUpload} className="relative w-4/5 h-96 max-w-xs mb-10 bg-white  ">
                         <label className="block font-semibold mt-2"> Language </label>
                         <input type="text" placeholder="Language" name="language" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setLanguage(e.target.value)}/>
-                        <label className="block font-semibold mt-2"> Version </label>
-                        <input type="text" placeholder="Version" name="version" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setVersion(e.target.value)}/>
+                        <label className="block font-semibold mt-2"> Description </label>
+                        <input type="text" placeholder="Desc" name="desc" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setDesc(e.target.value)}/>
                         <input type="file" id="file-upload" className="hidden" onChange={handleFileChange}/>
                         <label htmlFor="file-upload" className="z-20 flex flex-col-reverse items-center justify-center w-full h-2/5 mt-4 cursor-pointer rounded-lg shadow-inner">
                             {file ? (

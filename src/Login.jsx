@@ -18,12 +18,12 @@ export default function Login() {
       return alert('Please fill all the fields')
     } else {
       try {
-        const response = await axios.post('http://localhost:5000/login', data)
+        const response = await axios.post('http://localhost:5002/login', data)
   
         setDataLogin(response.data)
         console.log(response.data)
         localStorage.setItem('token', response.data.token)
-        navigate('/home')
+        window.location.replace('/home')
       } catch (error) {
         console.error(error)
       }
@@ -32,7 +32,7 @@ export default function Login() {
 
   const handleLogout = () => {
     localStorage.removeItem('token')
-    navigate('/login')
+    window.location.replace('/login')
   }
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function Login() {
                 <input type="password" placeholder="Password" name="password" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" />
                   <div className="flex justify-between items-baseline">
                     <button type="submit" className="mt-4 bg-purple-500 text-white py-2 px-6 rounded-md hover:bg-purple-600 ">Login</button>
-                    <a href="#" className="text-sm hover:underline">Forgot password?</a>
+                    <a href="register" className="text-sm hover:underline">Buat Akun?</a>
                   </div>
               </form>
             </div>      
