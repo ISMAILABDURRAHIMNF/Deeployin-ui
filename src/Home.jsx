@@ -36,6 +36,21 @@ export default function Home() {
         }
     }
 
+    const handleLogout = async () => {
+        const data = new FormData();
+        data.append('token', token);
+        console.log(data)
+        try{
+            const response = await axios.post('http://localhost:5002/logout', data);
+            console.log(response);
+            localStorage.removeItem('token')
+            window.location.replace('login')
+        } catch (err){
+            console.error('error:', err);
+            alert(err);
+        }
+    }
+
     return (
         <div className="h-screen font-sans text-gray-900 bg-gray-300 border-box">
             <div className="flex justify-center w-full mx-auto sm:max-w-lg">
@@ -63,6 +78,7 @@ export default function Home() {
                         </label>
                         <button type="submit" className="mt-4 w-full py-2 text-white bg-indigo-600 rounded hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-50">Generate</button>
                     </form>
+                    <button onClick={handleLogout}>Logout</button>
                 </div>
             </div>
         </div>
