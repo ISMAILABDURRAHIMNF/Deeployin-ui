@@ -20,8 +20,9 @@ export default function Home() {
             }
             try {
                 const response = await axios.post('http://localhost:5002/get_docker_data', data);
-            
-                if (response.data.docker_data == null){
+                console.log(response);
+
+                if (response.data.docker_data == null ||  response.data.docker_data.length == 0){
                     setIsHaveImage(false);
                 } else {
                     setDockerData(response.data.docker_data);
@@ -64,12 +65,38 @@ export default function Home() {
             console.log(response2);
             
             if(response1.data.status == 200 && response2.data.status == 200 ){
-                setLoading(false);
                 window.location.reload();
             }
         } catch (err) {
             console.error('error:', err);
             alert(err);
+        }
+
+        setLoading(false);
+    }
+
+    const handleStop = async (id_container) => {
+        try{
+            console.log(id_container)
+            const response = await axios.post('http://localhost:5002/stop_container', {"id_container" : id_container});
+            console.log(response);
+        } catch (err) {
+            console.error('error:', err);
+            alert(err);
+        }
+    }
+
+    const handleHapus = async (id_container) => {
+        const pilihanUser = confirm("Apakah yakin ingin menghapus container, image beserta file appnya?");
+
+        if(pilihanUser){
+            try{
+                const response = await axios.post('http://localhost:5002/delete', {"id_container" : id_container})
+                console.log(response);
+            } catch (err){
+                console.error('error:', err);
+                alert(err);
+            }
         }
     }
 
@@ -117,10 +144,13 @@ export default function Home() {
                                 <tbody>
                                     {dockerData.map((item) => (
                                         <tr key={item.id_container}>
-                                           <td>{item.name}</td>
-                                           <td>{item.dockerfile}</td>
-                                           <td className='text-center'>{item.status}</td>
-                                           <td className='text-center'>Stop | Hapus</td> 
+                                            <td>{item.name}</td>
+                                            <td>{item.dockerfile}</td>
+                                            <td className='text-center'>{item.status}</td>
+                                            <td className='text-center'>
+                                                <button onClick={() => handleStop(item.id_container)}>Stop</button>|
+                                                <button onClick={() => handleHapus(item.id_container)}>Hapus</button>
+                                            </td> 
                                         </tr>
                                     ))}
                                 </tbody>
