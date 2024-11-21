@@ -18,7 +18,7 @@ export default function Register() {
         const response = await axios.post('http://localhost:5002/register', data)
 
         console.log(response.data)
-        navigate('/login')
+        window.location.replace('/login')
       } catch (error) {
         console.error(error)
       }
