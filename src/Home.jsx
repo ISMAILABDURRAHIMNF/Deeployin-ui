@@ -167,7 +167,7 @@ export default function Home() {
                                     {dockerData.map((item) => (
                                         <tr key={item.id}>
                                             <td>{item.name}</td>
-                                            <td>{item.dockerfile}</td>
+                                            <td><a href={item.dockerfile} className="font-medium text-blue-600 dark:text-blue-500 hover:underline" download="Dockerfile">Download</a></td>
                                             <td className='text-center'>{item.status}</td>
                                             <td className='text-center'>
                                                 <button onClick={() => handleAction(item.id, item.status)} disabled={loadingAction === item.id}>
@@ -185,8 +185,8 @@ export default function Home() {
                         </div>
                     ) : (
                         <div className="flex justify-center w-full mx-auto sm:max-w-lg">
-                            <div className="flex flex-col items-center justify-center w-full h-auto my-20 bg-white sm:w-3/4 sm:rounded-lg sm:shadow-xl">
-                                <div className="mt-10 mb-10 text-center">
+                            <div className="flex flex-col items-center justify-center w-full h-auto bg-white sm:w-3/4 sm:rounded-lg sm:shadow-xl">
+                                <div className="mt-10 mb-5 text-center">
                                     <h2 className="text-2xl font-semibold mb-2">Upload your files</h2>
                                     <p className="text-xs text-gray-500">File should be .zip format</p>
                                 </div>
@@ -198,7 +198,7 @@ export default function Home() {
                                     <label className="block font-semibold mt-2"> Port </label>
                                     <input type="text" placeholder="Desc" name="desc" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setPort(e.target.value)}/>
                                     <input type="file" id="file-upload" className="hidden" onChange={handleFileChange}/>
-                                    <label htmlFor="file-upload" className="z-20 flex flex-col-reverse items-center justify-center w-full h-2/5 mt-4 cursor-pointer rounded-lg shadow-inner">
+                                    <label htmlFor="file-upload" className="z-20 flex flex-col-reverse items-center justify-center w-full h-1/5 mt-4 cursor-pointer rounded-lg shadow-inner">
                                         {file ? (
                                             <p className="z-10 text-xs font-light text-center text-gray-500">{file.name}</p>
                                         ) : (
