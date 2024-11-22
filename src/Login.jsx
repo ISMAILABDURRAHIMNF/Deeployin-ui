@@ -30,17 +30,6 @@ export default function Login() {
     }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    window.location.replace('/login')
-  }
-
-  useEffect(() => {
-    if (location.pathname === '/logout') {
-      handleLogout()
-    }
-  }, [location])
-
   
   return (
     <div>
