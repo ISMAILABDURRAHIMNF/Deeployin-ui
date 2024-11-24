@@ -7,7 +7,8 @@ export default function Home() {
     const [file, setFile] = useState(null)
     const [language, setLanguage] = useState('');
     const [desc, setDesc] = useState('');
-    const [port, setPort] = useState('');
+    const [srcPort, setSrcPort] = useState('');
+    const [dstPort, setDstPort] = useState('');
     const [token, setToken] = useState(() => localStorage.getItem("token"));
     const [isHaveImage, setIsHaveImage] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -56,8 +57,9 @@ export default function Home() {
         formData.append('token', token);
         formData.append('language', language);
         formData.append('desc', desc);
-        formData.append('port', port)
-
+        formData.append('srcport', srcPort)
+        formData.append('dstport', dstPort)
+        
         console.log(formData)
 
         try{
@@ -128,15 +130,6 @@ export default function Home() {
 
     return (
         <div className="h-screen font-sans text-gray-900 bg-gray-300 border-box">
-            <div className="flex justify-end p-4">
-            <button
-                onClick={handleLogout}
-                className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-500 focus:outline-none"
-            >
-                Logout
-            </button>
-            </div>
-
             {loading ?(
                 <div className="flex justify-center w-full mx-auto sm:max-w-lg">
                     <div className="flex flex-col items-center justify-center w-full h-auto my-80">
@@ -151,6 +144,14 @@ export default function Home() {
                 </div>
             ) : (
                 <div>
+                    <div className="flex justify-end p-4">
+                        <button
+                            onClick={handleLogout}
+                            className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-500 focus:outline-none"
+                        >
+                            Logout
+                        </button>
+                    </div>
                     {isHaveImage ?(
                         <div className="flex justify-center mx-auto w-4/6">
                             <div className="flex flex-col items-center justify-center w-full h-auto my-20 bg-white sm:rounded-lg sm:shadow-xl">
@@ -171,10 +172,10 @@ export default function Home() {
                                             <td className='text-center'>{item.status}</td>
                                             <td className='text-center'>
                                                 <button onClick={() => handleAction(item.id, item.status)} disabled={loadingAction === item.id}>
-                                                    {loadingAction === item.id ? "Loading.." : item.status == 'stopped' ? "Start" : "Stop"}
+                                                    {loadingAction === item.id ? "..." : item.status == 'stopped' ? "Start" : "Stop"}
                                                 </button>|
                                                 <button onClick={() => handleHapus(item.id)} disabled={loadingDelete === item.id}>
-                                                    {loadingDelete === item.id ? "Loading.." : "Hapus"}
+                                                    {loadingDelete === item.id ? "..." : "Hapus"}
                                                 </button>
                                             </td> 
                                         </tr>
@@ -195,8 +196,10 @@ export default function Home() {
                                     <input type="text" placeholder="Language" name="language" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setLanguage(e.target.value)}/>
                                     <label className="block font-semibold mt-2"> Description </label>
                                     <input type="text" placeholder="Desc" name="desc" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setDesc(e.target.value)}/>
-                                    <label className="block font-semibold mt-2"> Port </label>
-                                    <input type="text" placeholder="Desc" name="desc" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setPort(e.target.value)}/>
+                                    <div className="flex space-x-2">
+                                        <input type="text" placeholder="Src Port" name="srcPort" className="border w-full h-5 px-3 py-5 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setSrcPort(e.target.value)} />
+                                        <input type="text" placeholder="Dst Port" name="dstPort" className="border w-full h-5 px-3 py-5 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setDstPort(e.target.value)} />
+                                    </div>
                                     <input type="file" id="file-upload" className="hidden" onChange={handleFileChange}/>
                                     <label htmlFor="file-upload" className="z-20 flex flex-col-reverse items-center justify-center w-full h-1/5 mt-4 cursor-pointer rounded-lg shadow-inner">
                                         {file ? (
