@@ -34,8 +34,7 @@ export default function Home() {
                 }
                 setLoading(false);
             } catch (err){
-                console.error('error: ', err);
-                alert(err);
+                alert(err.response.data.message);
             }
         }
 
@@ -78,6 +77,23 @@ export default function Home() {
             setLoading(false);
         }
 
+    }
+
+    const handleDownload = async (app_name) =>{
+        try{
+            const response = await axios.post('http://localhost:5001/download', {'app_name': app_name}, {responseType: 'blob'});
+
+            const filebBlob = response.data;
+            const link = document.createElement('a');
+            const url = window.URL.createObjectURL(filebBlob);
+
+            link.href = url;
+            link.download = 'Dockerfile';
+            link.click();
+        } catch (err){
+            console.error(err)
+            alert(err)
+        }
     }
 
     const handleAction = async (id_container, status) => {
@@ -168,7 +184,7 @@ export default function Home() {
                                     {dockerData.map((item) => (
                                         <tr key={item.id}>
                                             <td>{item.name}</td>
-                                            <td><a href={item.dockerfile} className="font-medium text-blue-600 dark:text-blue-500 hover:underline" download="Dockerfile">Download</a></td>
+                                            <td><button onClick={() => handleDownload(item.name)}>Download</button></td>
                                             <td className='text-center'>{item.status}</td>
                                             <td className='text-center'>
                                                 <button onClick={() => handleAction(item.id, item.status)} disabled={loadingAction === item.id}>
@@ -196,6 +212,10 @@ export default function Home() {
                                     <input type="text" placeholder="Language" name="language" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setLanguage(e.target.value)}/>
                                     <label className="block font-semibold mt-2"> Description </label>
                                     <input type="text" placeholder="Desc" name="desc" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setDesc(e.target.value)}/>
+                                    <div className="flex space-x-2">
+                                        <label className="block font-semibold mt-2 w-full"> Source Port </label>
+                                        <label className="block font-semibold mt-2 w-full"> Destination Port </label>
+                                    </div>
                                     <div className="flex space-x-2">
                                         <input type="text" placeholder="Src Port" name="srcPort" className="border w-full h-5 px-3 py-5 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setSrcPort(e.target.value)} />
                                         <input type="text" placeholder="Dst Port" name="dstPort" className="border w-full h-5 px-3 py-5 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setDstPort(e.target.value)} />

@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import './index.css'
 import axios from 'axios'
 
@@ -19,8 +18,9 @@ export default function Register() {
 
         console.log(response.data)
         window.location.replace('/login')
-      } catch (error) {
-        console.error(error)
+      } catch (err) {
+        alert(err.response.data.message)
+        window.location.replace('/register')
       }
     }
   }

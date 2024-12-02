@@ -1,11 +1,8 @@
-import { useNavigate } from 'react-router-dom'
 import './index.css'
 import axios from 'axios'
 import { useState } from 'react'
-import { useEffect } from 'react'
 
 export default function Login() {
-  const navigate = useNavigate()
   const [dataLogin, setDataLogin] = useState(null)
 
   const submitLogin = async (e) => {
@@ -24,8 +21,9 @@ export default function Login() {
         console.log(response.data)
         localStorage.setItem('token', response.data.token)
         window.location.replace('/home')
-      } catch (error) {
-        console.error(error)
+      } catch (err) {
+        alert(err.response.data.message)
+        window.location.replace('/login')
       }
     }
   }
