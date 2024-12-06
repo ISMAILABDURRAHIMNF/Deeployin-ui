@@ -2,7 +2,7 @@ import './index.css'
 import axios from 'axios'
 
 export default function Login() {
-  const apiBackend2 = import.meta.env.API_BACKEND2
+  const apiBackend2 = import.meta.env.VITE_API_BACKEND2
 
   const submitLogin = async (e) => {
     e.preventDefault()

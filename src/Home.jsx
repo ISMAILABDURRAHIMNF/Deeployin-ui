@@ -16,8 +16,8 @@ export default function Home() {
     const [loadingAction, setLoadingAction] = useState(null);
     const [loadingDelete, setLoadingDelete] = useState(null);
 
-    const apiBackend1 = import.meta.env.API_BACKEND1
-    const apiBackend2 = import.meta.env.API_BACKEND2
+    const apiBackend1 = import.meta.env.VITE_API_BACKEND1
+    const apiBackend2 = import.meta.env.VITE_API_BACKEND2
 
     useEffect(() => {
         const checkImage = async () => {
@@ -76,7 +76,7 @@ export default function Home() {
             }
         } catch (err) {
             console.error('error:', err);
-            alert(err);
+            alert(err.data.message);
         } finally {
             setLoading(false);
         }
