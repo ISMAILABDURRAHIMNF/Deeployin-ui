@@ -2,6 +2,8 @@ import './index.css'
 import axios from 'axios'
 
 export default function Register() {
+  const apiBackend2 = import.meta.env.API_BACKEND2
+
   const submitResgiter = async (e) => {
     e.preventDefault()
 
@@ -14,9 +16,10 @@ export default function Register() {
       return alert('Please fill all the fields')
     } else {
       try {
-        const response = await axios.post('http://localhost:5002/register', data)
+        const response = await axios.post(`${apiBackend2}/register`, data)
 
         console.log(response.data)
+        alert(response.data.message)
         window.location.replace('/login')
       } catch (err) {
         alert(err.response.data.message)

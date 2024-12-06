@@ -1,9 +1,8 @@
 import './index.css'
 import axios from 'axios'
-import { useState } from 'react'
 
 export default function Login() {
-  const [dataLogin, setDataLogin] = useState(null)
+  const apiBackend2 = import.meta.env.API_BACKEND2
 
   const submitLogin = async (e) => {
     e.preventDefault()
@@ -15,10 +14,10 @@ export default function Login() {
       return alert('Please fill all the fields')
     } else {
       try {
-        const response = await axios.post('http://localhost:5002/login', data)
+        const response = await axios.post(`${apiBackend2}/login`, data)
   
-        setDataLogin(response.data)
         console.log(response.data)
+        alert(response.data.message)
         localStorage.setItem('token', response.data.token)
         window.location.replace('/home')
       } catch (err) {
