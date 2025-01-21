@@ -69,16 +69,18 @@ export default function Home() {
             const response2 = await axios.post(`${apiBackend2}/upload_file`, formData);
             console.log(response1);
             console.log(response2);
-            
-            if(response1.data.status == 200 && response2.data.status == 200 ){
-                alert(`${response1.data.message} dan ${response2.data.message}`)
+	                
+            if(response1.status == 200 && response2.status == 200 ){
+                alert(response1.data.message);
+		alert(response2.data.message);
                 window.location.reload();
             }
         } catch (err) {
             console.error('error:', err);
-            alert(err.data.message);
+	    alert(err.response.data.message);
         } finally {
             setLoading(false);
+	    window.location.reload();
         }
     }
 
