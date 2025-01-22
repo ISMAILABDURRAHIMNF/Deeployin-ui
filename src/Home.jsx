@@ -217,7 +217,36 @@ export default function Home() {
                                 </div>
                                 <form onSubmit={handleUpload} className="relative w-4/5 h-96 max-w-xs mb-10 bg-white  ">
                                     <label className="block font-semibold mt-2"> Language </label>
-                                    <input type="text" placeholder="Language" name="language" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setLanguage(e.target.value)}/>
+                                    <select
+                                        name="language"
+                                        className="border w-full h-10 px-3 py-2 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md"
+                                        onChange={(e) => setLanguage(e.target.value)}
+                                        >
+                                        <option value="" disabled selected>
+                                            Select Language
+                                        </option>
+                                        <option value="javascript">JavaScript</option>
+                                        <option value="python">Python</option>
+                                        <option value="java">Java</option>
+                                        <option value="c">C</option>
+                                        <option value="cpp">C++</option>
+                                        <option value="csharp">C#</option>
+                                        <option value="php">PHP</option>
+                                        <option value="ruby">Ruby</option>
+                                        <option value="html">HTML</option>
+                                        <option value="go">Go</option>
+                                        <option value="rust">Rust</option>
+                                        <option value="typescript">TypeScript</option>
+                                        <option value="kotlin">Kotlin</option>
+                                        <option value="dart">Dart</option>
+                                        <option value="r">R</option>
+                                        <option value="scala">Scala</option>
+                                        <option value="perl">Perl</option>
+                                        <option value="lua">Lua</option>
+                                        <option value="haskell">Haskell</option>
+                                        <option value="objective-c">Objective-C</option>
+                                    </select>
+
                                     <label className="block font-semibold mt-2"> Description </label>
                                     <input type="text" placeholder="Desc" name="desc" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md" onChange={(e) => setDesc(e.target.value)}/>
                                     <div className="flex space-x-2">
