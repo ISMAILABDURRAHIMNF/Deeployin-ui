@@ -1,6 +1,6 @@
 # Dockerfile Generator
 
-Hi, thanks for visiting my repo, this project is a automation program with Docker. This Dockerfile Generator is accessed through in console, but this project will always be developed to bring more features.
+Hi, thanks for visiting my repo, this project is a Deeployin. This repo is frontend for Dockerfile Generator and Automation Deploy project.
 
 ## 🔧 How to use
 
