@@ -1,8 +1,28 @@
-# React + Vite
+# Dockerfile Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Hi, thanks for visiting my repo, this project is a automation program with Docker. This Dockerfile Generator is accessed through in console, but this project will always be developed to bring more features.
 
-Currently, two official plugins are available:
+## 🔧 How to use
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Clone this repo to ur computer
+
+```bash
+  git clone https://github.com/ISMAILABDURRAHIMNF/Dockerfile-Generator.git
+```
+
+Install node and pnpm and then reate the `.env` file in the same directory as `main.py` using this variable.
+
+```bash
+  VITE_API_BACKEND1=http://localhost:5001
+  VITE_API_BACKEND2=http://localhost:5002
+```
+
+Use the program by running dev mode using host `0.0.0.0`
+
+```bash
+  pnpm run dev --host 0.0.0.0
+```
+
+## ❗Warning !
+
+This project is under development, stay tuned for upcoming features and dont forget to report any bugs u find!
