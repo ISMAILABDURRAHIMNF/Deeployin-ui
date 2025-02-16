@@ -1,33 +1,43 @@
 import './index.css'
 import axios from 'axios'
+import { FormEvent } from 'react'
+
+interface LoginResponse {
+  message: string;
+  token: string;
+}
 
 export default function Login() {
-  const apiBackend2 = import.meta.env.VITE_API_BACKEND2
+  const apiBackend2: string = import.meta.env.VITE_API_BACKEND2
 
-  const submitLogin = async (e) => {
+  const submitLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const formData = new FormData(e.target)
-    const data = Object.fromEntries(formData)
-    
+    const formData = new FormData(e.currentTarget)
+    const data = Object.fromEntries(formData) as { username: string; password: string}
+
     if (!data.username || !data.password) {
       return alert('Please fill all the fields')
-    } else {
-      try {
-        const response = await axios.post(`${apiBackend2}/login`, data)
-  
-        console.log(response.data)
-        alert(response.data.message)
-        localStorage.setItem('token', response.data.token)
-        window.location.replace('/home')
-      } catch (err) {
+    }
+
+    try {
+      const response = await axios.post<LoginResponse>(`${apiBackend2}/login`, data)
+
+      console.log(response.data)
+      alert(response.data.message)
+      localStorage.setItem('token', response.data.token)
+      window.location.replace('/home')
+    } catch (err) {
+      if(axios.isAxiosError(err) && err.response){
         alert(err.response.data.message)
-        window.location.replace('/login')
+      } else {
+        alert('AN error occured')
       }
+      window.location.replace('/login')
     }
   }
 
-  
+
   return (
     <div>
       <div className="relative flex min-h-screen text-gray-800 antialiased flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
@@ -46,7 +56,7 @@ export default function Login() {
                     <a href="register" className="text-sm hover:underline">Buat Akun?</a>
                   </div>
               </form>
-            </div>      
+            </div>
           </div>
         </div>
       </div>

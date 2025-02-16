@@ -6,7 +6,7 @@ import Register from './Register'
 import Home from './Home'
 import './index.css'
 
-const isAuthenticated = () => {
+const isAuthenticated = (): boolean => {
   return localStorage.getItem('token') !== null
 }
 
@@ -24,7 +24,9 @@ export default function Main() {
   )
 }
 
-createRoot(document.getElementById('root')).render(
+const rootElement = document.getElementById('root') as NonNullable<HTMLElement>
+
+createRoot(rootElement).render(
   <StrictMode>
     <Main />
   </StrictMode>,

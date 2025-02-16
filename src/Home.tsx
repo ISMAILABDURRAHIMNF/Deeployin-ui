@@ -1,58 +1,74 @@
 import './index.css';
 import axios from 'axios';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+
+interface DockerData{
+    id: string;
+    appName: string;
+    status: string;
+}
+
+interface ApiResponse {
+    message: string;
+    dockerData?: DockerData[]
+}
 
 export default function Home() {
-    const [file, setFile] = useState(null);
-    const [language, setLanguage] = useState('');
-    const [desc, setDesc] = useState('');
-    const [srcPort, setSrcPort] = useState('');
-    const [dstPort, setDstPort] = useState('');
-    const [token, setToken] = useState(() => localStorage.getItem("token"));
-    const [isHaveImage, setIsHaveImage] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [dockerData, setDockerData] = useState([]);
-    const [loadingAction, setLoadingAction] = useState(null);
-    const [loadingDelete, setLoadingDelete] = useState(null);
+    const [file, setFile] = useState<File | null>(null);
+    const [language, setLanguage] = useState<string>('');
+    const [desc, setDesc] = useState<string>('');
+    const [srcPort, setSrcPort] = useState<string>('');
+    const [dstPort, setDstPort] = useState<string>('');
+    const [token, setToken] = useState<string>(() => localStorage.getItem("token") || "");
+    const [isHaveImage, setIsHaveImage] = useState<boolean | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [dockerData, setDockerData] = useState<DockerData[]>([]);
+    const [loadingAction, setLoadingAction] = useState<string | null>(null);
+    const [loadingDelete, setLoadingDelete] = useState<string | null>(null);
 
     const apiBackend1 = import.meta.env.VITE_API_BACKEND1
     const apiBackend2 = import.meta.env.VITE_API_BACKEND2
 
     useEffect(() => {
         const checkImage = async () => {
-            const data = {
-                token
-            }
+            const data = { token }
             try {
-                const response = await axios.post(`${apiBackend2}/get_docker_data`, data);
+                const response = await axios.post<ApiResponse>(`${apiBackend2}/get_docker_data`, data);
                 console.log(response);
 
-                if (response.data.docker_data == null ||  response.data.docker_data.length == 0){
+                if (!response.data.dockerData ||  response.data.dockerData.length === 0){
                     setIsHaveImage(false);
                 } else {
-                    setDockerData(response.data.docker_data);
+                    setDockerData(response.data.dockerData);
                     console.log(dockerData);
                     setIsHaveImage(true);
                 }
                 setLoading(false);
-            } catch (err){
-                alert(err.response.data.message);
+            } catch (err: any){
+                alert(err.response?.data?.message || "Terjadi Kesalahan");
             }
         }
 
         checkImage()
     }, []);
 
-    const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
-        console.log(event.target.files[0])
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = event.target.files?.[0]
+        if (selectedFile) {
+            setFile(selectedFile)
+            console.log(selectedFile)
+        }
     };
 
-    const handleUpload = async (e) => {
+    const handleUpload = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         setLoading(true);
+
+        if (!file){
+            alert("Pilih file untuk diunggah!")
+            setLoading(false)
+            return
+        }
 
         const formData = new FormData();
         formData.append('file', file);
@@ -61,51 +77,51 @@ export default function Home() {
         formData.append('desc', desc);
         formData.append('srcport', srcPort)
         formData.append('dstport', dstPort)
-        
+
         console.log(formData)
 
         try{
-            const response1 = await axios.post(`${apiBackend1}/generate`, formData);
-            const response2 = await axios.post(`${apiBackend2}/upload_file`, formData);
-            console.log(response1);
-            console.log(response2);
-	                
-            if(response1.status == 200 && response2.status == 200 ){
+            const response1 = await axios.post<ApiResponse>(`${apiBackend1}/generate`, formData);
+            const response2 = await axios.post<ApiResponse>(`${apiBackend2}/upload_file`, formData);
+            console.log(response1, response2);
+
+
+            if(response1.status === 200 && response2.status === 200 ){
                 alert(response1.data.message);
 		alert(response2.data.message);
                 window.location.reload();
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error('error:', err);
-	    alert(err.response.data.message);
+	    alert(err.response?.data?.message || "Terjadi kesalahan");
         } finally {
             setLoading(false);
 	    window.location.reload();
         }
     }
 
-    const handleDownload = async (app_name) =>{
+    const handleDownload = async (appName: string) =>{
         try{
-            const response = await axios.post(`${apiBackend1}/download`, {'app_name': app_name}, {responseType: 'blob'});
+            const response = await axios.post(`${apiBackend1}/download`, {'app_name': appName}, {responseType: 'blob'});
 
             const filebBlob = response.data;
-            const link = document.createElement('a');
             const url = window.URL.createObjectURL(filebBlob);
+            const link = document.createElement('a');
 
             link.href = url;
             link.download = 'Dockerfile';
             link.click();
         } catch (err){
             console.error(err)
-            alert(err)
+            alert("Gagal mengunduh Dockerfile")
         }
     }
 
-    const handleAction = async (id_container, status) => {
+    const handleAction = async (id_container: string, status: string) => {
         setLoadingAction(id_container);
         try{
             const action = status == 'stopped' ? 'start_container' : 'stop_container';
-            const response = await axios.post(`${apiBackend2}/${action}`, {"id" : id_container});
+            const response = await axios.post<ApiResponse>(`${apiBackend2}/${action}`, {"id" : id_container});
             console.log(response);
             alert(response.data.message)
         } catch (err) {
@@ -117,13 +133,13 @@ export default function Home() {
         }
     }
 
-    const handleHapus = async (id_container) => {
+    const handleHapus = async (id_container: string) => {
         const pilihanUser = confirm("Apakah yakin ingin menghapus container, image beserta file appnya?");
 
         if(pilihanUser){
             setLoadingDelete(id_container);
             try{
-                const response = await axios.post(`${apiBackend2}/delete`, {"id" : id_container})
+                const response = await axios.post<ApiResponse>(`${apiBackend2}/delete`, {"id" : id_container})
                 console.log(response);
                 alert(response.data.message)
             } catch (err){
@@ -137,11 +153,13 @@ export default function Home() {
     }
 
     const handleLogout = async () => {
+        if (!token) return
+
         const data = new FormData();
         data.append('token', token);
         console.log(data)
         try{
-            const response = await axios.post(`${apiBackend2}/logout`, data);
+            const response = await axios.post<ApiResponse>(`${apiBackend2}/logout`, data);
             console.log(response);
             localStorage.removeItem('token')
             window.location.replace('login')
@@ -191,8 +209,8 @@ export default function Home() {
                                 <tbody>
                                     {dockerData.map((item) => (
                                         <tr key={item.id}>
-                                            <td>{item.name}</td>
-                                            <td><button onClick={() => handleDownload(item.name)}>Download</button></td>
+                                            <td>{item.appName}</td>
+                                            <td><button onClick={() => handleDownload(item.appName)}>Download</button></td>
                                             <td className='text-center'>{item.status}</td>
                                             <td className='text-center'>
                                                 <button onClick={() => handleAction(item.id, item.status)} disabled={loadingAction === item.id}>
@@ -201,7 +219,7 @@ export default function Home() {
                                                 <button onClick={() => handleHapus(item.id)} disabled={loadingDelete === item.id}>
                                                     {loadingDelete === item.id ? "..." : "Hapus"}
                                                 </button>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

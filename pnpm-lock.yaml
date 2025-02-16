@@ -25,7 +25,7 @@ importers:
         specifier: ^9.9.0
         version: 9.9.1
       '@types/react':
-        specifier: ^18.3.3
+        specifier: ^18.3.5
         version: 18.3.5
       '@types/react-dom':
         specifier: ^18.3.0
@@ -57,6 +57,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.10
         version: 3.4.10
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
       vite:
         specifier: ^5.4.1
         version: 5.4.3
@@ -1584,6 +1587,11 @@ packages:
   typed-array-length@1.0.6:
     resolution: {integrity: sha512-/OxDN6OtAk5KBpGb28T+HZc2M+ADtvRxXrKKbUwtsLgdoxgX13hyy7ek6bFRl5+aBs2yZzB0c4CnQfAtVypW/g==}
     engines: {node: '>= 0.4'}
+
+  typescript@5.7.3:
+    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
 
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
@@ -3341,6 +3349,8 @@ snapshots:
       has-proto: 1.0.3
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
+
+  typescript@5.7.3: {}
 
   unbox-primitive@1.0.2:
     dependencies:
